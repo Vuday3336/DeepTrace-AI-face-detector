@@ -1,0 +1,12 @@
+# Frozen CLIP ViT-B/16 + logistic regression. No epochs/LR: the probe is fitted in closed form.
+# Features are extracted from CLEAN crops (no augmentation) — the generalisation claim we test is
+# about the frozen CLIP features themselves.
+model: clip_probe
+seed: 42
+epochs: 1
+batch_size: 256
+amp: true
+num_workers: 4
+warmup_epochs: 0.0
+train_fraction: 1.0
+probe_c_grid: [0.001, 0.01, 0.1, 1.0, 10.0]

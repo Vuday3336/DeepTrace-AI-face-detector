@@ -1,0 +1,38 @@
+# Canonical preprocessing — the SAME rules for real & fake, every dataset, and the backend.
+# Exported to preprocess.json next to the processed data (and later next to model.onnx).
+# Changing anything here means re-running prepare_dataset.py: bump `version` when you do.
+
+version: "1.0.0"
+seed: 42
+
+io:
+  max_file_bytes: 10485760        # 10 MB, same limit as the API
+  max_pixels: 40000000            # rejects decompression bombs (~6300x6300)
+  alpha_background: [255, 255, 255]  # transparent PNG/WebP pixels are composited onto white
+
+face:
+  # MTCNN internal settings (facenet-pytorch defaults except where noted)
+  mtcnn_min_face_size: 20         # smallest face MTCNN searches for, in detection-image pixels
+  mtcnn_thresholds: [0.6, 0.7, 0.7]
+  # Our own post-filters, in ORIGINAL image pixels
+  min_face_size: 40               # tiny faces carry too little detail to judge
+  prob_threshold: 0.90            # drop low-confidence detections (usually not faces)
+  detect_max_side: 1024           # detect on a downscaled copy for speed; boxes are rescaled back
+  max_faces: 10                   # API cap per image
+
+crop:
+  # Square crop centred on the face box: side = max(box_w, box_h) * (1 + margin_ratio).
+  # If the square doesn't fit, it is SHIFTED/SHRUNK to stay inside the image — never padded.
+  # Padding would add black borders whose amount differs between datasets (a new shortcut).
+  margin_ratio: 0.30
+  output_size: 224                # native input size of EfficientNet-B0 / ConvNeXt-T / ViT-S / CLIP ViT-B/16
+  resample: bicubic               # Pillow's bicubic is antialiased when downscaling
+
+encode:
+  # Offline: every processed face is re-encoded to JPEG with a quality drawn from [min, max],
+  # seeded by the file's sha256 (same file -> same quality, independent of processing order).
+  offline_quality_min: 80
+  offline_quality_max: 95
+  # Inference: uploads are re-encoded once at this fixed quality (middle of the training range).
+  inference_quality: 90
+  subsampling: "4:2:0"            # the JPEG default almost everywhere (cameras, social media)

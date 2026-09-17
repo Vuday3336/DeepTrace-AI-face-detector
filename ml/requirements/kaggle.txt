@@ -1,0 +1,5 @@
+# Extras on top of the Kaggle Python image (which already ships torch, numpy, pandas, sklearn,
+# matplotlib, PyWavelets, scipy, pyyaml, tqdm). We do NOT reinstall those — replacing Kaggle's CUDA
+# torch wastes minutes and can break the GPU. Exact versions used in each run are recorded in
+# env.json instead, which keeps runs reproducible.
+imagehash==4.3.1

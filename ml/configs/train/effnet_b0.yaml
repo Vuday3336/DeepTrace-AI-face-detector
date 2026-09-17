@@ -1,0 +1,25 @@
+# Baseline. Small model -> larger backbone LR is safe and batch 128 fits a 16 GB T4 with AMP.
+model: effnet_b0
+seed: 42
+epochs: 15
+batch_size: 128
+lr_backbone: 3.0e-4
+lr_head: 1.0e-3
+weight_decay: 0.05
+warmup_epochs: 1.0
+early_stopping_patience: 3
+amp: true
+num_workers: 4
+grad_clip_norm: 1.0
+train_fraction: 1.0
+augment:
+  jpeg_quality_min: 30
+  jpeg_quality_max: 100
+  jpeg_p: 0.5
+  blur_sigma_max: 2.0
+  blur_p: 0.2
+  downscale_min: 0.25
+  downscale_p: 0.3
+  color_jitter: 0.1
+  color_jitter_p: 0.3
+  hflip_p: 0.5

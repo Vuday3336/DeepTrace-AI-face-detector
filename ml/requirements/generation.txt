@@ -1,0 +1,8 @@
+# Diffusion face generation (Kaggle GPU). Installed on top of Kaggle's torch.
+diffusers==0.32.2
+transformers==4.47.1
+accelerate==1.2.1
+bitsandbytes==0.45.0
+sentencepiece==0.2.0
+protobuf==5.28.3
+safetensors==0.4.5

@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Data: raw/processed images are large and may contain personal photos (EXIF/GPS) — never commit
+ml/data/raw/
+ml/data/processed/
+ml/data/generated/
+*.zip
+
+# Manifests ARE committed (small, reproducible) except progress logs
+**/progress_*.jsonl
+
+# Model artifacts: weights live on the Hugging Face Hub, not in git
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+ml/runs/**/checkpoints/
+
+# Node / frontend
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

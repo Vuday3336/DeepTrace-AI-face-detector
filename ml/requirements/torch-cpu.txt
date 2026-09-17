@@ -1,0 +1,4 @@
+# Local CPU-only PyTorch (small download, no CUDA). Install with:
+#   pip install -r requirements/torch-cpu.txt --index-url https://download.pytorch.org/whl/cpu
+torch==2.9.1
+torchvision==0.24.1

@@ -1,0 +1,25 @@
+# Dataset organisation & leakage-control settings.
+
+seed: 42
+
+# 140k Real and Fake Faces: folder names -> our source names
+dataset_140k:
+  name: "140k"
+  sources:
+    real: ffhq
+    fake: stylegan
+
+# The official 140k "valid" split (20k) is halved, stratified by label.
+validation_subsplits:
+  source_split: valid
+  first: val_select   # early stopping + model selection
+  second: val_calib   # temperature scaling + threshold + uncertainty band
+
+# Near-duplicate detection (perceptual hashes, 64 bits each).
+# A pair is a duplicate only if BOTH pHash and dHash Hamming distances are <= max_hamming_distance.
+# Requiring both hashes cuts false positives on aligned faces, which look alike at low frequency.
+dedupe:
+  max_hamming_distance: 4
+  # When a duplicate pair spans two splits, the member whose split comes LATER in this list is
+  # dropped. Training data is never removed to "fix" a test set; the test side is.
+  split_priority: [train, val_select, val_calib, test, crossgen, own]

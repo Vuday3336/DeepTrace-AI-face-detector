@@ -1,0 +1,5 @@
+# MTCNN face detection needs PyTorch. CPU wheels only (much smaller image):
+#   pip install -r requirements-torch.txt --index-url https://download.pytorch.org/whl/cpu
+#   pip install facenet-pytorch==2.6.0 --no-deps
+torch==2.9.1
+torchvision==0.24.1

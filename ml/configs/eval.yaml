@@ -1,0 +1,24 @@
+# Evaluation, calibration and robustness settings (decided before seeing test results).
+
+calibration:
+  target_fpr: 0.05              # at most 5% of real photos may be flagged (false accusations are the costly error)
+  max_abstention: 0.15          # the "uncertain" band may cover at most 15% of images
+  target_error_capture: 0.5     # ...and should contain at least half of the remaining mistakes
+
+bootstrap:
+  n_resamples: 1000
+  seed: 42
+
+robustness:
+  n_per_class: 500              # per test set, sampled with the seed below
+  seed: 42
+  grid:
+    jpeg_quality: [100, 90, 80, 70, 60, 50, 40, 30]
+    downscale: [1.0, 0.75, 0.5, 0.35, 0.25]
+    blur_sigma: [0.5, 1.0, 1.5, 2.0, 3.0]
+  screenshot_seeds: [1, 2, 3]
+
+selection:                      # docs/ARCHITECTURE.md §5.0 — the pre-registered "best model" rule
+  id_auc_margin: 0.03           # eligible if ID ROC-AUC >= best ID AUC - 0.03
+  latency_budget_ms_p95: 500    # eligible if model+explanation p95 latency on CPU is below this
+  crossgen_sets_prefix: "fake_swap_"

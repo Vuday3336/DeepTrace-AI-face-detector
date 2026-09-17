@@ -1,0 +1,4 @@
+# facenet-pytorch pins an old torch (2.2.x) in its metadata, but the MTCNN code runs fine on newer
+# torch. ALWAYS install this file with --no-deps so it cannot downgrade Kaggle's CUDA torch:
+#   pip install -r requirements/facenet.txt --no-deps
+facenet-pytorch==2.6.0

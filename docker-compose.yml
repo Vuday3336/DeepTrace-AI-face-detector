@@ -1,0 +1,56 @@
+# Full local stack: React (nginx) + FastAPI + PostgreSQL (history enabled).
+#   cp .env.example .env   # then set DEEPTRACE_JWT_SECRET and POSTGRES_PASSWORD
+#   docker compose up --build
+#   open http://localhost:8080
+#
+# The model bundle comes from ./models/current (export it with ml/scripts/export_model.py) or, if that
+# folder is empty, is downloaded from DEEPTRACE_MODEL_REPO_ID on the Hugging Face Hub.
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: deeptrace
+      POSTGRES_USER: deeptrace
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U deeptrace -d deeptrace"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DEEPTRACE_ENVIRONMENT: production
+      DEEPTRACE_DATABASE_URL: postgresql+asyncpg://deeptrace:${POSTGRES_PASSWORD}@db:5432/deeptrace
+      DEEPTRACE_JWT_SECRET: ${DEEPTRACE_JWT_SECRET:?set DEEPTRACE_JWT_SECRET in .env (32+ chars)}
+      DEEPTRACE_MODEL_REPO_ID: ${DEEPTRACE_MODEL_REPO_ID:-}
+      DEEPTRACE_MODEL_REVISION: ${DEEPTRACE_MODEL_REVISION:-main}
+      DEEPTRACE_TRUST_FORWARDED_FOR: "true"   # requests arrive through the nginx container
+      DEEPTRACE_CORS_ORIGINS: '["http://localhost:8080"]'
+      DEEPTRACE_RATE_LIMIT_REQUESTS: ${DEEPTRACE_RATE_LIMIT_REQUESTS:-10}
+      DEEPTRACE_RETENTION_DAYS: ${DEEPTRACE_RETENTION_DAYS:-30}
+    volumes:
+      - ${MODEL_HOST_DIR:-./models}:/app/models
+      - uploads:/app/data/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    expose:
+      - "8000"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  uploads:

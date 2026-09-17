@@ -1,0 +1,25 @@
+# Optional transformer comparison. ViTs are sensitive to LR: small backbone LR + warmup.
+model: vit_small
+seed: 42
+epochs: 12
+batch_size: 64
+lr_backbone: 5.0e-5
+lr_head: 1.0e-3
+weight_decay: 0.05
+warmup_epochs: 1.0
+early_stopping_patience: 3
+amp: true
+num_workers: 4
+grad_clip_norm: 1.0
+train_fraction: 0.5
+augment:
+  jpeg_quality_min: 30
+  jpeg_quality_max: 100
+  jpeg_p: 0.5
+  blur_sigma_max: 2.0
+  blur_p: 0.2
+  downscale_min: 0.25
+  downscale_p: 0.3
+  color_jitter: 0.1
+  color_jitter_p: 0.3
+  hflip_p: 0.5

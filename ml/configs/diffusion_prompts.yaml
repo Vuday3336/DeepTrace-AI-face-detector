@@ -1,0 +1,41 @@
+# Prompt space for generating the cross-generator fake set.
+# Why so many attributes: if every fake were a studio portrait of a young adult, a detector could
+# look "good" or "bad" because of age/lighting/setting instead of generation artifacts. Sampling
+# attributes uniformly (seeded) gives a varied, reproducible set.
+
+template: "{shot} of a {age} {ethnicity} {gender}, {expression}, {lighting}, {setting}, {camera}"
+
+attributes:
+  shot:
+    - "a close-up portrait photo"
+    - "a headshot photo"
+    - "a candid photo"
+    - "a selfie"
+  age: ["19-year-old", "27-year-old", "35-year-old", "48-year-old", "60-year-old", "74-year-old"]
+  ethnicity: ["East Asian", "South Asian", "Southeast Asian", "Black", "White", "Hispanic", "Middle Eastern"]
+  gender: ["woman", "man"]
+  expression: ["neutral expression", "smiling", "laughing", "serious expression", "slight smile"]
+  lighting: ["natural daylight", "soft window light", "indoor fluorescent light", "golden hour sunlight", "overcast light", "on-camera flash"]
+  setting: ["outdoors in a park", "in an office", "at home", "on a city street", "in front of a plain wall", "in a cafe"]
+  camera: ["shot on a smartphone", "DSLR photo, 85mm lens", "webcam photo", "35mm film photo"]
+
+# SDXL only (FLUX.1-schnell is guidance-distilled and ignores negative prompts)
+negative_prompt: "cartoon, anime, illustration, painting, drawing, 3d render, cgi, text, watermark, logo, multiple people, deformed, blurry"
+
+models:
+  sdxl:
+    repo_id: "stabilityai/stable-diffusion-xl-base-1.0"
+    vae_repo_id: "madebyollin/sdxl-vae-fp16-fix"   # the stock SDXL VAE produces NaNs/black images in fp16
+    width: 1024
+    height: 1024
+    steps: 30
+    guidance_scale: 6.0
+    base_seed: 100000
+  flux-schnell:
+    repo_id: "black-forest-labs/FLUX.1-schnell"    # Apache-2.0
+    width: 768
+    height: 768
+    steps: 4
+    guidance_scale: 0.0
+    max_sequence_length: 256
+    base_seed: 200000
