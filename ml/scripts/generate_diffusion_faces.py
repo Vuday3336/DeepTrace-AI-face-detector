@@ -106,6 +106,14 @@ def load_pipeline(model: str, mcfg: dict[str, Any], flux_dtype: str) -> Any:
         pipe.set_progress_bar_config(disable=True)
         return pipe
 
+    try:
+        import bitsandbytes  # noqa: F401  (4-bit loading backend for FLUX only)
+    except Exception as exc:  # noqa: BLE001 — a broken install raises more than ImportError
+        raise RuntimeError(
+            "FLUX needs a working bitsandbytes: pip install -r requirements/generation-flux.txt. "
+            f"Import failed with {type(exc).__name__}: {exc}"
+        ) from exc
+
     from diffusers import BitsAndBytesConfig as DiffusersBnbConfig
     from diffusers import FluxPipeline, FluxTransformer2DModel
     from transformers import BitsAndBytesConfig as TransformersBnbConfig

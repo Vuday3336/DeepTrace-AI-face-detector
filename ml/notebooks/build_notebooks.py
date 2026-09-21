@@ -255,7 +255,16 @@ token as a Kaggle secret named `HF_TOKEN` (Add-ons → Secrets).
         code(
             SETUP
             + r"""
-subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", "requirements/generation.txt"], check=True)
+# ---- Parameters (set BEFORE the installs: FLUX needs an extra package that SDXL must not have) ----
+MODELS = ["sdxl"]            # ["sdxl"], ["flux-schnell"], or both (both may not fit in one 12 h run)
+COUNT_PER_MODEL = 500        # a bit above 400 leaves room for images where MTCNN finds no face
+PREVIOUS_OUTPUT = None       # e.g. Path("/kaggle/input/<previous-version-output>/generated")
+
+# bitsandbytes is installed ONLY for FLUX. With SDXL it is not merely useless but harmful: older
+# builds import `triton.ops`, removed in Triton 3.x, which makes `import diffusers` fail outright.
+requirements = "requirements/generation-flux.txt" if "flux-schnell" in MODELS else "requirements/generation.txt"
+print("Installing", requirements)
+subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-r", requirements], check=True)
 subprocess.run([sys.executable, "-m", "pip", "install", "-q", "-e", ".", "--no-deps"], check=True)
 
 try:  # optional Hugging Face login from a Kaggle secret
@@ -268,19 +277,12 @@ except Exception as exc:  # no secret configured -> public models still work
 
 OUT = WORK / "generated"
 
-# ---- Parameters ----
-MODELS = ["sdxl"]            # ["sdxl"], ["flux-schnell"], or both (both may not fit in one 12 h run)
-COUNT_PER_MODEL = 700        # a bit above 600 leaves room for images where MTCNN finds no face
-PREVIOUS_OUTPUT = None       # e.g. Path("/kaggle/input/<previous-version-output>/generated")
-
 import shutil
 if PREVIOUS_OUTPUT is not None:
     if not Path(PREVIOUS_OUTPUT).is_dir():
         raise FileNotFoundError(
-            f"PREVIOUS_OUTPUT does not exist: {PREVIOUS_OUTPUT}
-"
-            "Attach the dataset first (right panel -> Add Input) and check the exact path,
-"
+            f"PREVIOUS_OUTPUT does not exist: {PREVIOUS_OUTPUT}. "
+            "Attach the dataset first (right panel -> Add Input) and check the exact path, "
             "or set PREVIOUS_OUTPUT = None for a first run."
         )
     shutil.copytree(PREVIOUS_OUTPUT, OUT, dirs_exist_ok=True)

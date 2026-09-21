@@ -1,8 +1,9 @@
-# Diffusion face generation (Kaggle GPU). Installed on top of Kaggle's torch.
+# SDXL generation on Kaggle GPU (installed on top of Kaggle's torch).
+# NOTE: bitsandbytes is deliberately NOT here. It is only needed for FLUX 4-bit loading, and older
+# builds import `triton.ops`, which no longer exists in Triton 3.x -> importing diffusers crashes.
 diffusers==0.32.2
 transformers==4.47.1
 accelerate==1.2.1
-bitsandbytes==0.50.2
 sentencepiece==0.2.0
-protobuf==5.28.3
+protobuf>=5.29.1
 safetensors==0.4.5

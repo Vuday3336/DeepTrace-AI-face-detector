@@ -1,0 +1,4 @@
+# Extra packages for FLUX.1-schnell only (4-bit quantized loading).
+# Install AFTER generation.txt:  pip install -r requirements/generation-flux.txt
+-r generation.txt
+bitsandbytes==0.50.2
