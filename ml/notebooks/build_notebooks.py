@@ -579,6 +579,10 @@ def main() -> None:
         ("02_train_and_evaluate.ipynb", train_notebook()),
         ("03_robustness_explain_export.ipynb", evaluate_notebook()),
     ):
+        # Deterministic cell ids: nbformat would randomise them on every build, which makes the
+        # committed notebooks differ after every regeneration (noisy diffs, unverifiable output).
+        for index, cell in enumerate(nb.cells):
+            cell["id"] = f"{Path(name).stem}-{index:02d}"
         nbformat.validate(nb)
         path = HERE / name
         nbformat.write(nb, path)
