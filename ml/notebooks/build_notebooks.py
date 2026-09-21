@@ -275,8 +275,16 @@ PREVIOUS_OUTPUT = None       # e.g. Path("/kaggle/input/<previous-version-output
 
 import shutil
 if PREVIOUS_OUTPUT is not None:
+    if not Path(PREVIOUS_OUTPUT).is_dir():
+        raise FileNotFoundError(
+            f"PREVIOUS_OUTPUT does not exist: {PREVIOUS_OUTPUT}
+"
+            "Attach the dataset first (right panel -> Add Input) and check the exact path,
+"
+            "or set PREVIOUS_OUTPUT = None for a first run."
+        )
     shutil.copytree(PREVIOUS_OUTPUT, OUT, dirs_exist_ok=True)
-    print("Resumed from", PREVIOUS_OUTPUT)
+    print("Resumed from", PREVIOUS_OUTPUT, "->", len(list(OUT.rglob("*.png"))), "images carried over")
 """
         ),
         md("## Generate"),
