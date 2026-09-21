@@ -19,7 +19,7 @@ SETUP = r"""# ---- Setup: clone your repo + install the few extras Kaggle doesn'
 import os, subprocess, sys
 from pathlib import Path
 
-REPO_URL = "https://github.com/<YOUR_GITHUB_USERNAME>/deeptrace.git"   # <-- EDIT ME
+REPO_URL = "https://github.com/Vuday3336/DeepTrace-AI-face-detector.git"
 ON_KAGGLE = Path("/kaggle/working").exists()
 WORK = Path("/kaggle/working") if ON_KAGGLE else Path("/content")
 REPO = WORK / "deeptrace"

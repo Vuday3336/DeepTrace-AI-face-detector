@@ -63,7 +63,7 @@ git init
 git add .
 git commit -m "Phase 1-2: architecture, data pipeline, shortcut audit"
 git branch -M main
-git remote add origin https://github.com/<YOUR_GITHUB_USERNAME>/deeptrace.git
+git remote add origin https://github.com/Vuday3336/DeepTrace-AI-face-detector.git
 git push -u origin main
 ```
 

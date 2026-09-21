@@ -1,6 +1,6 @@
 # DeepTrace — Explainable AI-Generated Face Detector
 
-[![CI](https://github.com/<YOUR_GITHUB_USERNAME>/deeptrace/actions/workflows/ci.yml/badge.svg)](https://github.com/<YOUR_GITHUB_USERNAME>/deeptrace/actions/workflows/ci.yml)
+[![CI](https://github.com/Vuday3336/DeepTrace-AI-face-detector/actions/workflows/ci.yml/badge.svg)](https://github.com/Vuday3336/DeepTrace-AI-face-detector/actions/workflows/ci.yml)
 
 Upload a photo → DeepTrace finds every face → for each one it returns **REAL / AI-GENERATED / UNCERTAIN**,
 a **calibrated probability**, and a **heatmap** of the regions that drove the decision.
