@@ -127,7 +127,14 @@ have all metadata stripped.
    dataset `deeptrace-runs-<model>`. Rerun the best model(s) with `SEEDS = [42, 43, 44]`.
 2. `03_robustness_explain_export.ipynb` — attach `deeptrace-processed`, the 140k dataset and all
    `deeptrace-runs-*`; **Save & Run All**. It picks the deployment model with the pre-registered rule.
-3. Copy `ml/reports`, `docs/plots`, `docs/METRICS.md` from the artifacts zip into the repo, write
+3. Import the artifacts zip downloaded from Kaggle (copies `ml/reports` + `docs/plots` into the repo
+   and regenerates `docs/METRICS.md`):
+
+   ```powershell
+   .venv\Scripts\python.exe scripts\import_kaggle_artifacts.py --zip "$HOME\Downloads\deeptrace_final_artifacts.zip"
+   ```
+
+   Add `--dry-run` first to see what it would copy. Then write
    `docs/EXPLAINABILITY.md`, and upload the winning bundle:
    `python scripts/upload_model_to_hub.py --bundle-dir artifacts/<winner> --repo-id <user>/deeptrace-model`.
 

@@ -179,7 +179,7 @@ real photo and real MTCNN, in both the two-service layout and the single-contain
 | Data / model | Use here | License (verify before any reuse) |
 |---|---|---|
 | 140k Real and Fake Faces (Kaggle): FFHQ reals, StyleGAN fakes | Train / validation / ID test | FFHQ: CC BY-NC-SA 4.0 (non-commercial) |
-| CelebA-HQ | Cross-generator real test images | Non-commercial research only |
+| CelebA-HQ (Kaggle mirror `celeba-hq`) | Cross-generator real test images | The Kaggle mirror states no license; upstream CelebA is **non-commercial research only**, so that restriction is assumed |
 | SDXL base 1.0 | Generating test fakes | CreativeML Open RAIL++-M |
 | FLUX.1 [schnell] | Generating test fakes | Apache-2.0 |
 | DiFF (if access granted) | Cross-generator test | Research use by application |
